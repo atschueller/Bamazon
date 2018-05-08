@@ -1,44 +1,44 @@
-var mysql = require('mysql');
-var inquirer = require('inquirer');
-var connection = mysql.createConnection({
+const inquirer = require('inquirer');
+const Sequelize = require('sequelize');
+const sequelize = new Sequelize('products_DB', 'Atschueller', 'Chilipepperwilson1984', {
   host: 'localhost',
-  user: 'Atschueller',
-  password: '',
-  database: 'Bamazon'
+  dialect: 'mysql',
 });
-
-connection.connect();
-
-connection.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
-  if (error) throw error;
-  console.log('The solution is: ', results[0].solution);
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log('Connection has been established successfully.');
+  })
+  .catch(err => {
+    console.error('Unable to connect to the database:', err);
+  });
+const Products = sequelize.define('products', {
+  product_id: Sequelize.STRING,
+  product_name: Sequelize.STRING,
+  department_name: Sequelize.STRING,
+  price: Sequelize.DECIMAL,
+  stock_quantity: Sequelize.INTEGER,
+  PRIMARYKEY: product_id,
 });
-
-connection.end();
-//create a function to display products when loaded//
-function createProduct() {
-
+Products.sync().then(() => Products.findAll().then(products => {
+  console.log(products);
+})
+);
+//Ask the customer which product they would like to purchase and the quantity
+function answers() {
+  console.log("Your order is:", answers);
 };
-
-inquirer.prompt([{
-  type: "input",
+const questions = [{
+  list: "products",
   message: "What is the ID of the product you would like to purchase?",
-  id: "id",
 },
 {
   type: "input",
   message: "How many would you like to buy?",
-  quantity: "quantity",
 },
-]).then(answers => {
-  console.log(id);
-  console.log(quantity);
-  if (quantity >= stock_quantity) {
-    console.log('Your purchase of' + product_name + 'is complete!')
+];
+inquirer.prompt(questions, answers).then(() => {
+  var customerProd = Products.findById(product_id);
 
-  } else {
-    console.log('Insufficient Quantity!');
-  };
-  
-  
 });
+  
