@@ -21,7 +21,7 @@ const Products = sequelize.define('products', {
   PRIMARYKEY: product_id,
 });
 Products.sync().then(() => Products.findAll().then(products => {
-  console.log(products);
+  Products.forEach(product => console.log('product_id:' + product_id + 'product_name:' + product_name + 'deparmtent_name:' + department_name + 'price:' + price + 'stock_quantity:' + stock_quantity));
 })
 );
 //Ask the customer which product they would like to purchase and the quantity
